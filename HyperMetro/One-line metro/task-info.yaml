@@ -183,6 +183,12 @@ files:
           }
       }
     learner_created: false
-feedback_link: https://hyperskill.org/projects/120/stages/648/implement#comment
-status: Unchecked
+  - name: src/metro/Node.java
+    visible: true
+    learner_created: true
+feedback_link: https://hyperskill.org/learn/step/10341#comment
+status: Solved
+feedback:
+  message: Congratulations!
+  time: "Fri, 08 Dec 2023 10:51:32 UTC"
 record: -1
