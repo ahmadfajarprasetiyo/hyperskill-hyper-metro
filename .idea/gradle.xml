@@ -22,6 +22,12 @@
             <option value="$PROJECT_DIR$/Topics/Command-line arguments/How to start a program" />
             <option value="$PROJECT_DIR$/Topics/Command-line arguments/Parameters and their values" />
             <option value="$PROJECT_DIR$/Topics/Command-line arguments/Theory" />
+            <option value="$PROJECT_DIR$/Topics/Patterns and Matcher/E-mail address" />
+            <option value="$PROJECT_DIR$/Topics/Patterns and Matcher/In the middle of a word" />
+            <option value="$PROJECT_DIR$/Topics/Patterns and Matcher/Number parsing" />
+            <option value="$PROJECT_DIR$/Topics/Patterns and Matcher/Start or end of a word" />
+            <option value="$PROJECT_DIR$/Topics/Patterns and Matcher/Theory" />
+            <option value="$PROJECT_DIR$/Topics/Patterns and Matcher/Why use Pattern and Matcher" />
             <option value="$PROJECT_DIR$/Topics/Regexes in programs/Card name validation and identification" />
             <option value="$PROJECT_DIR$/Topics/Regexes in programs/Check the clock time" />
             <option value="$PROJECT_DIR$/Topics/Regexes in programs/Ignoring spaces" />
