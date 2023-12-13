@@ -1,0 +1,14 @@
+<h2>Reflection invocation</h2>
+<div class="step-text">
+<p>What will be the result of the following method invocation:</p><div><br/></div><div><pre><pre><code class="language-java">public class Main {
+
+    public static void main(String[] args) throws Exception {
+        Main.class.getMethod("hello").invoke(null);
+    }
+
+    public static void hello() {
+        System.out.println("Hello world!");
+    }
+
+}</code></pre></pre></div>
+</div>
