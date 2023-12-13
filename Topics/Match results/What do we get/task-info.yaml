@@ -1,0 +1,31 @@
+type: choice
+is_multiple_choice: false
+options:
+  - text: returns 3
+  - text: returns 30
+  - text: throws IllegalStateException
+  - text: returns 0
+  - text: returns false
+  - text: returns 10
+files:
+  - name: src/Task.java
+    visible: true
+    text: |
+      // You can experiment here, it won’t be checked
+      
+      public class Task {
+        public static void main(String[] args) {
+          // put your code here
+        }
+      }
+    learner_created: false
+feedback_link: https://hyperskill.org/learn/step/3720#comment
+status: Solved
+feedback:
+  message: <html>Correct solution</html>
+  time: "Wed, 13 Dec 2023 00:12:13 UTC"
+record: -1
+selected_options:
+  - 5
+custom_name: What do we get?
+local_check: false
