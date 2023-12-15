@@ -63,6 +63,22 @@ public class Station {
         station.setNext(this);
     }
 
+    public List<Station> getNeighbor() {
+        List<Station> res = new ArrayList<>();
+
+        if (this.getNext() != null) {
+            res.add(this.getNext());
+        }
+
+        if (this.getPrev() != null) {
+            res.add(this.getPrev());
+        }
+
+        res.addAll(this.transferStations);
+
+        return res;
+    }
+
     public void remove() {
         if (this.prev != null) {
             this.prev.setNext(this.next);

@@ -3,7 +3,7 @@ hyperskill_project:
   ide_files: https://cogniterra.org/media/attachments/lesson/25042/additional_files.json
   is_template_based: false
   use_ide: true
-update_date: "Fri, 15 Dec 2023 03:35:11 UTC"
+update_date: "Fri, 15 Dec 2023 13:36:26 UTC"
 stages:
   - id: 648
     step: 10341
@@ -16,7 +16,7 @@ stages:
     is_completed: true
   - id: 651
     step: 10344
-    is_completed: false
+    is_completed: true
   - id: 652
     step: 10345
     is_completed: false
@@ -33,8 +33,6 @@ topics:
       theory_id: 20084
     - title: Data structures
       theory_id: 16927
-    - title: Units of information
-      theory_id: 6865
     - title: "Write, compile, and run"
       theory_id: 3739
     - title: "Basic terms: JVM, JRE, JDK"
@@ -43,6 +41,10 @@ topics:
       theory_id: 8977
     - title: Parameters and options
       theory_id: 9746
+    - title: Running programs on your computer
+      theory_id: 3746
+    - title: Units of information
+      theory_id: 6865
     - title: Pseudocode
       theory_id: 15090
     - title: Pseudocode basics
@@ -121,26 +123,22 @@ topics:
       theory_id: 3536
     - title: First glance at exceptions
       theory_id: 3497
-    - title: NullPointerException
-      theory_id: 1945
-    - title: Iterating over arrays
-      theory_id: 3602
-    - title: What is object-oriented programming
-      theory_id: 3614
-    - title: Grouping classes with packages
-      theory_id: 3621
     - title: Hierarchy of exceptions
       theory_id: 3570
     - title: Exception handling
       theory_id: 3552
-    - title: Running programs on your computer
-      theory_id: 3746
+    - title: NullPointerException
+      theory_id: 1945
+    - title: Iterating over arrays
+      theory_id: 3602
     - title: Throwing exceptions
       theory_id: 3553
     - title: File class
       theory_id: 3635
     - title: Reading files
       theory_id: 3636
+    - title: What is object-oriented programming
+      theory_id: 3614
     - title: What are bugs
       theory_id: 5504
     - title: Command-line arguments
@@ -159,6 +157,8 @@ topics:
       theory_id: 10630
     - title: Defining classes
       theory_id: 3618
+    - title: Grouping classes with packages
+      theory_id: 3621
     - title: Instance methods
       theory_id: 3495
     - title: Initializing new instances. Constructor

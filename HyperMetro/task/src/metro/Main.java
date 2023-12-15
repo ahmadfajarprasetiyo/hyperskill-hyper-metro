@@ -1,6 +1,7 @@
 package metro;
 
 import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -20,6 +21,7 @@ public class Main {
         final String ACTION_REMOVE = "/remove";
         final String ACTION_OUTPUT = "/output";
         final String ACTION_CONNECT = "/connect";
+        final String ACTION_ROUTE = "/route";
 
         MetroMap metroMap = new MetroMap();
         Scanner scanner = new Scanner(System.in);
@@ -73,7 +75,7 @@ public class Main {
                         line = metroMap.getSafeLine(params.get(1));
                     }
 
-                    case ACTION_CONNECT -> {
+                    case ACTION_CONNECT, ACTION_ROUTE -> {
                         if (params.size() != 5) {
                             System.out.println("Invalid command");
                             continue;
@@ -102,9 +104,8 @@ public class Main {
                             line.printLine();
                         }
                     }
-                    case ACTION_CONNECT -> {
-                        metroMap.buildConnection(params.get(1),params.get(2),params.get(3),params.get(4));
-                    }
+                    case ACTION_CONNECT -> metroMap.buildConnection(params.get(1),params.get(2),params.get(3),params.get(4));
+                    case ACTION_ROUTE -> metroMap.printRoute(params.get(1),params.get(2),params.get(3),params.get(4));
                     case ACTION_EXIT -> System.out.print("");
                     default -> System.out.println("Invalid command");
                 }
@@ -135,6 +136,15 @@ public class Main {
                 jsonReader.beginObject();
                 while (jsonReader.hasNext()) {
                     String nameAttribute = jsonReader.nextName();
+
+                    if (nameAttribute.equals("time")) {
+                        if (jsonReader.peek() == JsonToken.NUMBER) {
+                            jsonReader.nextInt();
+                        } else if (jsonReader.peek() == JsonToken.NULL) {
+                            jsonReader.nextNull();
+                        }
+
+                    }
 
                     if (nameAttribute.equals("name")) {
                         stationName = jsonReader.nextString();

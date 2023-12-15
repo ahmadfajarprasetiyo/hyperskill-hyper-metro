@@ -800,6 +800,301 @@ files:
           }
       }
     learner_created: false
+  - name: src/metro/Line.java
+    visible: true
+    text: |
+      package metro;
+      
+      
+      public class Line {
+          private final String name;
+          private Station firstDepot;
+          private Station lastDepot;
+          private Station firstStation;
+          private Station lastStation;
+      
+          Line(String name) {
+              this.name = name;
+              this.firstDepot = new Station("depot", name, Integer.MIN_VALUE);
+              this.lastDepot = new Station("depot", name, Integer.MAX_VALUE);
+          }
+      
+          public String getName() {
+              return name;
+          }
+      
+          public void addStation(Station station) {
+              if (firstStation == null) {
+                  this.firstStation = station;
+                  this.lastStation = station;
+              } else if (firstStation.getOrder() > station.getOrder()) {
+                  firstStation.addHeadStation(station);
+                  firstStation = station;
+              } else {
+                  Station iter = firstStation;
+                  while (iter.getOrder() < station.getOrder() && iter.getNext() != null) {
+                      iter = iter.getNext();
+                  }
+      
+                  if (iter.getOrder() != station.getOrder()) {
+                      if (iter.getNext() == null) {
+                          lastStation = station;
+                      }
+      
+                      iter.addTailStation(station);
+                  }
+      
+              }
+          }
+      
+          public void addHeadStation(String stationName) {
+              Station station = new Station(stationName, this.name, Integer.MIN_VALUE);
+              firstStation.addHeadStation(station);
+              firstStation = station;
+          }
+      
+          public void addTailStation(String stationName) {
+              Station station = new Station(stationName, this.name, Integer.MAX_VALUE);
+              lastStation.addTailStation(station);
+              lastStation = station;
+          }
+      
+          public void removeStation(String stationName) {
+              Station station = firstStation;
+              boolean isFinish = false;
+      
+              while (station != null && !isFinish) {
+                  if (station.getName().equals(stationName)) {
+                      if (station == firstStation) {
+                          firstStation = station.getNext();
+                      } else if (station == lastStation) {
+                          lastStation = station.getPrev();
+                      }
+      
+                      station.remove();
+                      isFinish = true;
+                  }
+              }
+          }
+      
+          public void printLine() {
+      
+              Station station = null;
+      
+              if (this.firstDepot != null && this.lastStation != null) {
+                  this.firstDepot.setNext(this.firstStation);
+                  this.lastStation.setNext(this.lastDepot);
+      
+                  station = this.firstDepot;
+              } else {
+                  System.out.println("depot");
+              }
+      
+      
+      
+              while (station != null) {
+                  station.printStation();
+                  station = station.getNext();
+      
+              }
+      
+              if (this.firstDepot != null && this.lastStation != null) {
+                  this.firstDepot.setNext(null);
+                  this.lastStation.setNext(null);
+              }
+          }
+      
+          public Station getStationInLine(String stationName) {
+              Station station = this.firstStation;
+      
+              while (station != null) {
+                  if (station.getName().equals(stationName)) {
+                      return station;
+                  }
+      
+                  station = station.getNext();
+              }
+      
+              return null;
+          }
+      
+      
+      }
+    learner_created: true
+  - name: src/metro/MetroMap.java
+    visible: true
+    text: |
+      package metro;
+      
+      import java.util.ArrayList;
+      import java.util.List;
+      import java.util.Map;
+      
+      public class MetroMap {
+      
+          private  List<Line> lines;
+      
+          MetroMap() {
+              lines = new ArrayList<>();
+          }
+      
+          public Line getSafeLine(String lineName) {
+              Line line = this.getLine(lineName);
+              if (line == null) {
+                  line = this.addLine(lineName);
+              }
+              return line;
+          }
+      
+          private Line getLine(String lineName) {
+              for (Line line : lines) {
+                  if (lineName.equals(line.getName())) {
+                      return line;
+                  }
+              }
+      
+              return null;
+          }
+      
+          public Line addLine(String lineName) {
+              Line line = new Line(lineName);
+              this.lines.add(line);
+              return line;
+          }
+          public void buildConnection(Map<Station, List<String>> mapStationTransfer) {
+              for (Station station : mapStationTransfer.keySet()) {
+                  List<String> values = mapStationTransfer.get(station);
+                  for (String value : values) {
+                      String[] lineAndStation = value.split("\\|");
+                      this.getSafeLine(lineAndStation[1]).getStationInLine(lineAndStation[0]).connectStation(station);
+                  }
+      
+              }
+          }
+      
+          public void buildConnection(String lineName1, String stationName1, String lineName2, String stationName2) {
+              this.getSafeLine(lineName1).getStationInLine(stationName1).connectStation(this.getSafeLine(lineName2).getStationInLine(stationName2));
+          }
+      
+          public boolean isEmpty() {
+              return lines.isEmpty();
+          }
+      }
+    learner_created: true
+  - name: src/metro/Station.java
+    visible: true
+    text: |
+      package metro;
+      
+      import java.util.ArrayList;
+      import java.util.List;
+      
+      public class Station {
+      
+          private Station prev = null;
+          private Station next = null;
+          private final String name;
+          private final String lineName;
+          private final int order;
+      
+          private List<Station> transferStations;
+      
+          Station(String name, String lineName, int order) {
+              this.lineName = lineName;
+              this.name = name;
+              this.order = order;
+              this.transferStations = new ArrayList<>();
+          }
+      
+          public String getName() {
+              return name;
+          }
+      
+          public String getLineName() {
+              return lineName;
+          }
+      
+          public int getOrder() {
+              return order;
+          }
+      
+          public void setNext(Station next) {
+              this.next = next;
+          }
+      
+          public void setPrev(Station prev) {
+              this.prev = prev;
+          }
+      
+          public Station getNext() {
+              return next;
+          }
+      
+          public Station getPrev() {
+              return prev;
+          }
+      
+          public void addTailStation(Station station) {
+              station.setNext(this.next);
+              this.next = station;
+              station.setPrev(this);
+      
+              if (station.getNext() != null) {
+                  station.getNext().setPrev(station);
+              }
+          }
+      
+          public void addHeadStation(Station station) {
+              this.prev = station;
+              station.setNext(this);
+          }
+      
+          public void remove() {
+              if (this.prev != null) {
+                  this.prev.setNext(this.next);
+              }
+      
+              if (this.next != null) {
+                  this.next.setPrev(this.prev);
+              }
+          }
+      
+          private boolean isConnectedStation(Station newStation) {
+              for (Station station : this.transferStations) {
+                  if (station == newStation) {
+                      return true;
+                  }
+              }
+      
+              return false;
+          }
+      
+          public void connectStation(Station station) {
+              if (this.isConnectedStation(station)) {
+                  return;
+              }
+      
+              this.transferStations.add(station);
+              station.connectStation(this);
+          }
+      
+          public void printStation() {
+              System.out.print(this.getName());
+      
+              for (Station station : this.transferStations) {
+                  System.out.printf(" - %s (%s line)", station.getName(), station.getLineName());
+              }
+      
+              System.out.println();
+          }
+      
+      
+      
+      }
+    learner_created: true
 feedback_link: https://hyperskill.org/learn/step/10344#comment
-status: Unchecked
+status: Solved
+feedback:
+  message: Congratulations!
+  time: "Fri, 15 Dec 2023 14:34:03 UTC"
 record: -1
