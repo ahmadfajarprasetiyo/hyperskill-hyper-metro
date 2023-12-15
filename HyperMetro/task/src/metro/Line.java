@@ -10,9 +10,8 @@ public class Line {
 
     Line(String name) {
         this.name = name;
-        this.firstDepot = new Station("depot", Integer.MIN_VALUE);
-        this.lastDepot = new Station("depot", Integer.MAX_VALUE);
-
+        this.firstDepot = new Station("depot", name, Integer.MIN_VALUE);
+        this.lastDepot = new Station("depot", name, Integer.MAX_VALUE);
     }
 
     public String getName() {
@@ -32,22 +31,25 @@ public class Line {
                 iter = iter.getNext();
             }
 
-            if (iter.getNext() == null) {
-                lastStation = station;
+            if (iter.getOrder() != station.getOrder()) {
+                if (iter.getNext() == null) {
+                    lastStation = station;
+                }
+
+                iter.addTailStation(station);
             }
 
-            iter.addTailStation(station);
         }
     }
 
     public void addHeadStation(String stationName) {
-        Station station = new Station(stationName, Integer.MIN_VALUE);
+        Station station = new Station(stationName, this.name, Integer.MIN_VALUE);
         firstStation.addHeadStation(station);
         firstStation = station;
     }
 
     public void addTailStation(String stationName) {
-        Station station = new Station(stationName, Integer.MAX_VALUE);
+        Station station = new Station(stationName, this.name, Integer.MAX_VALUE);
         lastStation.addTailStation(station);
         lastStation = station;
     }
@@ -72,37 +74,43 @@ public class Line {
 
     public void printLine() {
 
-        Station station1 = null;
-        Station station2 = null;
-        Station station3 = null;
+        Station station = null;
 
-        if (lastStation != null) {
+        if (this.firstDepot != null && this.lastStation != null) {
             this.firstDepot.setNext(this.firstStation);
             this.lastStation.setNext(this.lastDepot);
 
-            station1 = this.firstDepot;
-            station2 = station1.getNext();
-            station3 = station2.getNext();
+            station = this.firstDepot;
         } else {
             System.out.println("depot");
         }
 
 
 
-        while (station3 != null) {
-            System.out.printf("%s - %s - %s", station1.getName(), station2.getName(), station3.getName());
-            System.out.println();
-
-            station1 = station2;
-            station2 = station3;
-            station3 = station3.getNext();
+        while (station != null) {
+            station.printStation();
+            station = station.getNext();
 
         }
 
-        if (lastStation != null) {
+        if (this.firstDepot != null && this.lastStation != null) {
             this.firstDepot.setNext(null);
             this.lastStation.setNext(null);
         }
+    }
+
+    public Station getStationInLine(String stationName) {
+        Station station = this.firstStation;
+
+        while (station != null) {
+            if (station.getName().equals(stationName)) {
+                return station;
+            }
+
+            station = station.getNext();
+        }
+
+        return null;
     }
 
 

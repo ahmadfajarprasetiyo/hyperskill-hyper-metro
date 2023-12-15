@@ -1,19 +1,31 @@
 package metro;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Station {
 
     private Station prev = null;
     private Station next = null;
-    private String name;
-    private int order;
+    private final String name;
+    private final String lineName;
+    private final int order;
 
-    Station(String name, int order) {
+    private List<Station> transferStations;
+
+    Station(String name, String lineName, int order) {
+        this.lineName = lineName;
         this.name = name;
         this.order = order;
+        this.transferStations = new ArrayList<>();
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getLineName() {
+        return lineName;
     }
 
     public int getOrder() {
@@ -59,6 +71,35 @@ public class Station {
         if (this.next != null) {
             this.next.setPrev(this.prev);
         }
+    }
+
+    private boolean isConnectedStation(Station newStation) {
+        for (Station station : this.transferStations) {
+            if (station == newStation) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public void connectStation(Station station) {
+        if (this.isConnectedStation(station)) {
+            return;
+        }
+
+        this.transferStations.add(station);
+        station.connectStation(this);
+    }
+
+    public void printStation() {
+        System.out.print(this.getName());
+
+        for (Station station : this.transferStations) {
+            System.out.printf(" - %s (%s line)", station.getName(), station.getLineName());
+        }
+
+        System.out.println();
     }
 
 

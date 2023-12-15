@@ -6,9 +6,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,25 +19,26 @@ public class Main {
         final String ACTION_ADD_HEAD = "/add-head";
         final String ACTION_REMOVE = "/remove";
         final String ACTION_OUTPUT = "/output";
+        final String ACTION_CONNECT = "/connect";
 
-        List<Line> lines = new ArrayList<>();
+        MetroMap metroMap = new MetroMap();
         Scanner scanner = new Scanner(System.in);
         Pattern regex = Pattern.compile("[^\\s\"']+|\"[^\"]*\"|'[^']*'");
 
-        String filePath = "";
+        String filePath = "test3.json";
         if (args.length > 0) {
             filePath = args[0];
         }
 
         try {
-            lines = readJson(filePath);
+            metroMap = readJson(filePath);
         } catch (IOException e) {
             System.out.println("Error! Such a file doesn't exist!");
         } catch (Exception e) {
             System.out.println("Incorrect file");
         }
 
-        if (!lines.isEmpty()) {
+        if (!metroMap.isEmpty()) {
             String action;
             do {
                 action = ACTION_EXIT;
@@ -63,7 +62,7 @@ public class Main {
                             continue;
                         }
 
-                        line = getLine(lines, params.get(1));
+                        line = metroMap.getSafeLine(params.get(1));
                     }
                     case ACTION_OUTPUT -> {
                         if (params.size() != 2) {
@@ -71,7 +70,14 @@ public class Main {
                             continue;
                         }
 
-                        line = getLine(lines, params.get(1));
+                        line = metroMap.getSafeLine(params.get(1));
+                    }
+
+                    case ACTION_CONNECT -> {
+                        if (params.size() != 5) {
+                            System.out.println("Invalid command");
+                            continue;
+                        }
                     }
                 }
 
@@ -96,6 +102,9 @@ public class Main {
                             line.printLine();
                         }
                     }
+                    case ACTION_CONNECT -> {
+                        metroMap.buildConnection(params.get(1),params.get(2),params.get(3),params.get(4));
+                    }
                     case ACTION_EXIT -> System.out.print("");
                     default -> System.out.println("Invalid command");
                 }
@@ -105,38 +114,73 @@ public class Main {
 
     }
 
-    public static Line getLine(List<Line> lines, String lineName) {
-        for (Line line : lines) {
-            if (lineName.equals(line.getName())) {
-                return line;
-            }
-        }
 
-        return null;
-    }
-    public static ArrayList<Line> readJson(String fileName) throws IOException, NumberFormatException {
-        ArrayList<Line> lines = new ArrayList<>();
+    public static MetroMap readJson(String fileName) throws IOException, NumberFormatException {
+        MetroMap metroMap = new MetroMap();
         JsonReader jsonReader = new JsonReader(new FileReader(fileName));
+        Map<Station, List<String>> mapStationTransfer = new HashMap<>();
 
         jsonReader.beginObject();
         while (jsonReader.hasNext()) {
-            String nameLine = jsonReader.nextName();
-            Line line = new Line(nameLine);
+            String lineName = jsonReader.nextName();
+            Line line = metroMap.getSafeLine(lineName);
 
             jsonReader.beginObject();
             while (jsonReader.hasNext()) {
                 String orderString = jsonReader.nextName();
-                String nameStation = jsonReader.nextString();
+                List<String> transfer = new ArrayList<>();
                 int order = Integer.parseInt(orderString);
+                String stationName = "";
 
-                Station station = new Station(nameStation, order);
+                jsonReader.beginObject();
+                while (jsonReader.hasNext()) {
+                    String nameAttribute = jsonReader.nextName();
+
+                    if (nameAttribute.equals("name")) {
+                        stationName = jsonReader.nextString();
+                    }
+
+                    if (nameAttribute.equals("transfer")) {
+                        jsonReader.beginArray();
+                        while (jsonReader.hasNext()) {
+                            String nameStationTransfer = "";
+                            String nameLineTransfer = "";
+
+                            jsonReader.beginObject();
+                            while (jsonReader.hasNext()) {
+                                String nameAttributeArray = jsonReader.nextName();
+
+                                if (nameAttributeArray.equals("line")) {
+                                    nameLineTransfer = jsonReader.nextString();
+                                }
+
+                                if (nameAttributeArray.equals("station")) {
+                                    nameStationTransfer = jsonReader.nextString();
+                                }
+                            }
+                            jsonReader.endObject();
+
+                            transfer.add(String.join("|", nameStationTransfer, nameLineTransfer));
+                        }
+
+                        jsonReader.endArray();
+                    }
+                }
+                jsonReader.endObject();
+
+                Station station = new Station(stationName, lineName, order);
                 line.addStation(station);
+
+                mapStationTransfer.put(station, transfer);
             }
-            lines.add(line);
+
             jsonReader.endObject();
         }
+        jsonReader.endObject();
 
-        return lines;
+        metroMap.buildConnection(mapStationTransfer);
+
+        return metroMap;
 
     }
 }
