@@ -7,16 +7,19 @@ public class Station {
 
     private Station prev = null;
     private Station next = null;
+
+    private final int time;
     private final String name;
     private final String lineName;
     private final int order;
 
     private List<Station> transferStations;
 
-    Station(String name, String lineName, int order) {
+    Station(String name, String lineName, int order, int time) {
         this.lineName = lineName;
         this.name = name;
         this.order = order;
+        this.time = time;
         this.transferStations = new ArrayList<>();
     }
 
@@ -32,6 +35,9 @@ public class Station {
         return order;
     }
 
+    public int getTime() {
+        return time;
+    }
     public void setNext(Station next) {
         this.next = next;
     }

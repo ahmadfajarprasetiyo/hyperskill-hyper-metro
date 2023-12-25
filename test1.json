@@ -1,60 +1,151 @@
 {
-  "SubwayLink": {
+  "m1": {
     "1": {
-      "name": "Owings Mills",
-      "transfer": []
+      "name": "Renes—Gare",
+      "transfer": [],
+      "time": 3
     },
     "2": {
-      "name": "Old Court",
-      "transfer": []
+      "name": "Epenex",
+      "transfer": [],
+      "time": 2
     },
     "3": {
-      "name": "Milford Mill",
-      "transfer": []
+      "name": "Crochy",
+      "transfer": [],
+      "time": 6
     },
     "4": {
-      "name": "Reiserstown Plaza",
-      "transfer": []
+      "name": "Cerisaie",
+      "transfer": [],
+      "time": 5
     },
     "5": {
-      "name": "Rogers Avenue",
-      "transfer": []
+      "name": "Bassenges",
+      "transfer": [],
+      "time": 4
     },
     "6": {
-      "name": "West Cold Spring",
-      "transfer": []
+      "name": "EPFL",
+      "transfer": [],
+      "time": 6
     },
     "7": {
-      "name": "Mondawmin",
-      "transfer": []
+      "name": "UNL—Sorge",
+      "transfer": [],
+      "time": 8
     },
     "8": {
-      "name": "Penn North",
-      "transfer": []
+      "name": "Mouline",
+      "transfer": [],
+      "time": 5
     },
     "9": {
-      "name": "Uptown",
-      "transfer": []
+      "name": "UNL—Chemberonne",
+      "transfer": [],
+      "time": 4
     },
     "10": {
-      "name": "State Center",
-      "transfer": []
+      "name": "Bourdonnette",
+      "transfer": [],
+      "time": 5
     },
     "11": {
-      "name": "Lexington Market",
-      "transfer": []
+      "name": "Melley",
+      "transfer": [],
+      "time": 7
     },
     "12": {
-      "name": "Charles Center",
-      "transfer": []
+      "name": "Provence",
+      "transfer": [],
+      "time": 6
     },
     "13": {
-      "name": "Shot Tower/Market Place",
-      "transfer": []
+      "name": "Montelly",
+      "transfer": [],
+      "time": 5
     },
     "14": {
-      "name": "Johns Hopkins Hospital",
-      "transfer": []
+      "name": "Vigie",
+      "transfer": [],
+      "time": 4
+    },
+    "15": {
+      "name": "Lausanne—Flon",
+      "transfer": [],
+      "time": null
+    }
+  },
+  "m2": {
+    "1": {
+      "name": "Croisettes",
+      "transfer": [],
+      "time": 6
+    },
+    "2": {
+      "name": "Vennes",
+      "transfer": [],
+      "time": 5
+    },
+    "3": {
+      "name": "Fourmi",
+      "transfer": [],
+      "time": 4
+    },
+    "4": {
+      "name": "Sallaz",
+      "transfer": [],
+      "time": 6
+    },
+    "5": {
+      "name": "CHUV",
+      "transfer": [],
+      "time": 5
+    },
+    "6": {
+      "name": "Ours",
+      "transfer": [],
+      "time": 3
+    },
+    "7": {
+      "name": "Riponne M.Bejart",
+      "transfer": [],
+      "time": 4
+    },
+    "8": {
+      "name": "Bessieres",
+      "transfer": [],
+      "time": 6
+    },
+    "9": {
+      "name": "Lausanne—Flon",
+      "transfer": [],
+      "time": 5
+    },
+    "10": {
+      "name": "Lausanne Gare CFF",
+      "transfer": [],
+      "time": 3
+    },
+    "11": {
+      "name": "Grancy",
+      "transfer": [],
+      "time": 4
+    },
+    "12": {
+      "name": "Delices",
+      "transfer": [],
+      "time": 6
+    },
+    "13": {
+      "name": "Jourdils",
+      "transfer": [],
+      "time": 3
+    },
+    "14": {
+      "name": "Ouchy—Olympique",
+      "transfer": [],
+      "time": null
     }
   }
 }

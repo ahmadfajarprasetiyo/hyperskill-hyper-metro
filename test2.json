@@ -1,121 +1,281 @@
 {
-  "m1": {
+  "Linka A": {
     "1": {
-      "name": "Renes—Gare",
+      "name": "Nemocnice Motol" ,
       "transfer": []
-    },
+    } ,
     "2": {
-      "name": "Epenex",
+      "name": "Petriny" ,
       "transfer": []
-    },
+    } ,
     "3": {
-      "name": "Crochy",
+      "name": "Nadrazi Veleslavin" ,
       "transfer": []
-    },
+    } ,
     "4": {
-      "name": "Cerisaie",
+      "name": "Borislavka" ,
       "transfer": []
-    },
+    } ,
     "5": {
-      "name": "Bassenges",
+      "name": "Dejvicka" ,
       "transfer": []
-    },
+    } ,
     "6": {
-      "name": "EPFL",
+      "name": "Hradcanska" ,
       "transfer": []
-    },
+    } ,
     "7": {
-      "name": "UNL—Sorge",
+      "name": "Malostranska" ,
       "transfer": []
-    },
+    } ,
     "8": {
-      "name": "Mouline",
+      "name": "Staromestska" ,
       "transfer": []
-    },
+    } ,
     "9": {
-      "name": "UNL—Chemberonne",
-      "transfer": []
-    },
+      "name": "Mustek" ,
+      "transfer": [
+        {
+          "line": "Linka B" ,
+          "station": "Mustek"
+        }
+      ]
+    } ,
     "10": {
-      "name": "Bourdonnette",
-      "transfer": []
-    },
+      "name": "Muzeum" ,
+      "transfer": [
+        {
+          "line": "Linka C" ,
+          "station": "Muzeum"
+        }
+      ]
+    } ,
     "11": {
-      "name": "Melley",
+      "name": "Namesti Miru" ,
       "transfer": []
-    },
+    } ,
     "12": {
-      "name": "Provence",
+      "name": "Jiriho z Podebrad" ,
       "transfer": []
-    },
+    } ,
     "13": {
-      "name": "Montelly",
+      "name": "Flora" ,
       "transfer": []
-    },
+    } ,
     "14": {
-      "name": "Vigie",
+      "name": "Zelivskeho" ,
       "transfer": []
-    },
+    } ,
     "15": {
-      "name": "Lausanne—Flon",
+      "name": "Strasnicka" ,
+      "transfer": []
+    } ,
+    "16": {
+      "name": "Skalka" ,
+      "transfer": []
+    } ,
+    "17": {
+      "name": "Depo Hostivar" ,
       "transfer": []
     }
-  },
-  "m2": {
+  } ,
+  "Linka B": {
     "1": {
-      "name": "Croisettes",
+      "name": "Cerny Most" ,
       "transfer": []
-    },
+    } ,
     "2": {
-      "name": "Vennes",
+      "name": "Rajska zahrada" ,
       "transfer": []
-    },
+    } ,
     "3": {
-      "name": "Fourmi",
+      "name": "Hloubetin" ,
       "transfer": []
-    },
+    } ,
     "4": {
-      "name": "Sallaz",
+      "name": "Kolbenova" ,
       "transfer": []
-    },
+    } ,
     "5": {
-      "name": "CHUV",
+      "name": "Vysocanska" ,
       "transfer": []
-    },
+    } ,
     "6": {
-      "name": "Ours",
+      "name": "Ceskomoravska" ,
       "transfer": []
-    },
+    } ,
     "7": {
-      "name": "Riponne M.Bejart",
+      "name": "Palmovka" ,
       "transfer": []
-    },
+    } ,
     "8": {
-      "name": "Bessieres",
+      "name": "Invalidovna" ,
       "transfer": []
-    },
+    } ,
     "9": {
-      "name": "Lausanne—Flon",
+      "name": "Krizikova" ,
       "transfer": []
-    },
+    } ,
     "10": {
-      "name": "Lausanne Gare CFF",
-      "transfer": []
-    },
+      "name": "Florenc" ,
+      "transfer": [
+        {
+          "line": "Linka C" ,
+          "station": "Florenc"
+        }
+      ]
+    } ,
     "11": {
-      "name": "Grancy",
+      "name": "Namesti Republiky" ,
       "transfer": []
-    },
+    } ,
     "12": {
-      "name": "Delices",
-      "transfer": []
-    },
+      "name": "Mustek" ,
+      "transfer": [
+        {
+          "line": "Linka B" ,
+          "station": "Mustek"
+        }
+      ]
+    } ,
     "13": {
-      "name": "Jourdils",
+      "name": "Narodni trida" ,
       "transfer": []
-    },
+    } ,
     "14": {
-      "name": "Ouchy—Olympique",
+      "name": "Karlovo namesti" ,
+      "transfer": []
+    } ,
+    "15": {
+      "name": "Andel" ,
+      "transfer": []
+    } ,
+    "16": {
+      "name": "Smichovske nadrazi" ,
+      "transfer": []
+    } ,
+    "17": {
+      "name": "Radlicka" ,
+      "transfer": []
+    } ,
+    "18": {
+      "name": "Jinonice" ,
+      "transfer": []
+    } ,
+    "19": {
+      "name": "Nove Butovice" ,
+      "transfer": []
+    } ,
+    "20": {
+      "name": "Hurka" ,
+      "transfer": []
+    } ,
+    "21": {
+      "name": "Luziny" ,
+      "transfer": []
+    } ,
+    "22": {
+      "name": "Luka" ,
+      "transfer": []
+    } ,
+    "23": {
+      "name": "Stodulky" ,
+      "transfer": []
+    } ,
+    "24": {
+      "name": "Zlicin" ,
+      "transfer": []
+    }
+  } ,
+  "Linka C": {
+    "1": {
+      "name": "Letnany" ,
+      "transfer": []
+    } ,
+    "2": {
+      "name": "Prosek" ,
+      "transfer": []
+    } ,
+    "3": {
+      "name": "Strizkov" ,
+      "transfer": []
+    } ,
+    "4": {
+      "name": "Ladvi" ,
+      "transfer": []
+    } ,
+    "5": {
+      "name": "Kobylisy" ,
+      "transfer": []
+    } ,
+    "6": {
+      "name": "Nadrazi Holesovice" ,
+      "transfer": []
+    } ,
+    "7": {
+      "name": "Vltavska" ,
+      "transfer": []
+    } ,
+    "8": {
+      "name": "Florenc" ,
+      "transfer": [
+        {
+          "line": "Linka B" ,
+          "station": "Florenc"
+        }
+      ]
+    } ,
+    "9": {
+      "name": "Hlavni nadrazi" ,
+      "transfer": []
+    } ,
+    "10": {
+      "name": "Muzeum" ,
+      "transfer": [
+        {
+          "line": "Linka A" ,
+          "station": "Muzeum"
+        }
+      ]
+    } ,
+    "11": {
+      "name": "I.P.Pavlova" ,
+      "transfer": []
+    } ,
+    "12": {
+      "name": "Vysehrad" ,
+      "transfer": []
+    } ,
+    "13": {
+      "name": "Prazskeho povstani" ,
+      "transfer": []
+    } ,
+    "14": {
+      "name": "Pankrac" ,
+      "transfer": []
+    } ,
+    "15": {
+      "name": "Budejovicka" ,
+      "transfer": []
+    } ,
+    "16": {
+      "name": "Kacerov" ,
+      "transfer": []
+    } ,
+    "17": {
+      "name": "Roztyly" ,
+      "transfer": []
+    } ,
+    "18": {
+      "name": "Chodov" ,
+      "transfer": []
+    } ,
+    "19": {
+      "name": "Opatov" ,
+      "transfer": []
+    } ,
+    "20": {
+      "name": "Haje" ,
       "transfer": []
     }
   }

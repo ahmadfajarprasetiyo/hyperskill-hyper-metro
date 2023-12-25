@@ -10,8 +10,8 @@ public class Line {
 
     Line(String name) {
         this.name = name;
-        this.firstDepot = new Station("depot", name, Integer.MIN_VALUE);
-        this.lastDepot = new Station("depot", name, Integer.MAX_VALUE);
+        this.firstDepot = new Station("depot", name, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        this.lastDepot = new Station("depot", name, Integer.MAX_VALUE, Integer.MAX_VALUE);
     }
 
     public String getName() {
@@ -42,14 +42,14 @@ public class Line {
         }
     }
 
-    public void addHeadStation(String stationName) {
-        Station station = new Station(stationName, this.name, Integer.MIN_VALUE);
+    public void addHeadStation(String stationName, int time) {
+        Station station = new Station(stationName, this.name, Integer.MIN_VALUE, time);
         firstStation.addHeadStation(station);
         firstStation = station;
     }
 
-    public void addTailStation(String stationName) {
-        Station station = new Station(stationName, this.name, Integer.MAX_VALUE);
+    public void addTailStation(String stationName, int time) {
+        Station station = new Station(stationName, this.name, Integer.MAX_VALUE, time);
         lastStation.addTailStation(station);
         lastStation = station;
     }

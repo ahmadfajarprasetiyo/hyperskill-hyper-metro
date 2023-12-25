@@ -22,6 +22,7 @@ public class Main {
         final String ACTION_OUTPUT = "/output";
         final String ACTION_CONNECT = "/connect";
         final String ACTION_ROUTE = "/route";
+        final String ACTION_FASTEST_ROUTE = "/fastest-route";
 
         MetroMap metroMap = new MetroMap();
         Scanner scanner = new Scanner(System.in);
@@ -59,7 +60,7 @@ public class Main {
                 Line line = null;
                 switch (action){
                     case ACTION_APPEND, ACTION_ADD, ACTION_ADD_HEAD, ACTION_REMOVE -> {
-                        if (params.size() != 3) {
+                        if (params.size() != 4 && params.size() != 3) {
                             System.out.println("Invalid command");
                             continue;
                         }
@@ -75,7 +76,7 @@ public class Main {
                         line = metroMap.getSafeLine(params.get(1));
                     }
 
-                    case ACTION_CONNECT, ACTION_ROUTE -> {
+                    case ACTION_CONNECT, ACTION_ROUTE, ACTION_FASTEST_ROUTE -> {
                         if (params.size() != 5) {
                             System.out.println("Invalid command");
                             continue;
@@ -85,13 +86,21 @@ public class Main {
 
                 switch (action){
                     case ACTION_APPEND, ACTION_ADD -> {
+                        int time = Integer.MAX_VALUE;
+                        if (params.size() == 4) {
+                            time = Integer.parseInt(params.get(3));
+                        }
                         if (line != null) {
-                            line.addTailStation(params.get(2));
+                            line.addTailStation(params.get(2), time);
                         }
                     }
                     case ACTION_ADD_HEAD -> {
+                        int time = Integer.MAX_VALUE;
+                        if (params.size() == 4) {
+                            time = Integer.parseInt(params.get(3));
+                        }
                         if (line != null) {
-                            line.addHeadStation(params.get(2));
+                            line.addHeadStation(params.get(2), time);
                         }
                     }
                     case ACTION_REMOVE -> {
@@ -106,6 +115,7 @@ public class Main {
                     }
                     case ACTION_CONNECT -> metroMap.buildConnection(params.get(1),params.get(2),params.get(3),params.get(4));
                     case ACTION_ROUTE -> metroMap.printRoute(params.get(1),params.get(2),params.get(3),params.get(4));
+                    case ACTION_FASTEST_ROUTE -> metroMap.printFastestRoute(params.get(1),params.get(2),params.get(3),params.get(4));
                     case ACTION_EXIT -> System.out.print("");
                     default -> System.out.println("Invalid command");
                 }
@@ -132,6 +142,7 @@ public class Main {
                 List<String> transfer = new ArrayList<>();
                 int order = Integer.parseInt(orderString);
                 String stationName = "";
+                int timeElapse = 0;
 
                 jsonReader.beginObject();
                 while (jsonReader.hasNext()) {
@@ -139,7 +150,7 @@ public class Main {
 
                     if (nameAttribute.equals("time")) {
                         if (jsonReader.peek() == JsonToken.NUMBER) {
-                            jsonReader.nextInt();
+                            timeElapse = jsonReader.nextInt();
                         } else if (jsonReader.peek() == JsonToken.NULL) {
                             jsonReader.nextNull();
                         }
@@ -178,7 +189,7 @@ public class Main {
                 }
                 jsonReader.endObject();
 
-                Station station = new Station(stationName, lineName, order);
+                Station station = new Station(stationName, lineName, order, timeElapse);
                 line.addStation(station);
 
                 mapStationTransfer.put(station, transfer);
