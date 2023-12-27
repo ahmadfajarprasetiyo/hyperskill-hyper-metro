@@ -1,0 +1,24 @@
+type: code
+files:
+  - name: src/Main.java
+    visible: true
+    text: |-
+      import java.util.Scanner;
+      
+      public class Main {
+      
+          public static void main(String[] args) {
+              Scanner scanner = new Scanner(System.in);
+              String stringWithHtmlTags = scanner.nextLine();
+      
+              // write your code here
+          }
+      }
+    learner_created: false
+feedback_link: https://hyperskill.org/learn/step/4344#comment
+status: Solved
+feedback:
+  message: <html>Correct solution</html>
+  time: "Wed, 27 Dec 2023 08:49:11 UTC"
+record: -1
+submission_language: java17

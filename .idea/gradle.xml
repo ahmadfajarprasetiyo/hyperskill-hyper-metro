@@ -61,6 +61,11 @@
             <option value="$PROJECT_DIR$/Topics/Regexes in programs/Ignoring spaces" />
             <option value="$PROJECT_DIR$/Topics/Regexes in programs/Theory" />
             <option value="$PROJECT_DIR$/Topics/Regexes in programs/Vehicle registration number" />
+            <option value="$PROJECT_DIR$/Topics/Replacing characters/Methods of a string" />
+            <option value="$PROJECT_DIR$/Topics/Replacing characters/Remove HTML tags" />
+            <option value="$PROJECT_DIR$/Topics/Replacing characters/Remove extra spaces" />
+            <option value="$PROJECT_DIR$/Topics/Replacing characters/Theory" />
+            <option value="$PROJECT_DIR$/Topics/Replacing characters/What is the result" />
             <option value="$PROJECT_DIR$/util" />
           </set>
         </option>
