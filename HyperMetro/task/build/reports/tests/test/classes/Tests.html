@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.103s</div>
+<div class="counter">0.185s</div>
 <p>duration</p>
 </div>
 </td>
@@ -79,7 +79,7 @@
 </thead>
 <tr>
 <td class="success">start</td>
-<td class="success">0.103s</td>
+<td class="success">0.185s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -89,207 +89,69 @@
 <span class="code">
 <pre>?[1;31m
 Start test 1?[0m
-&gt; /output &quot;m1&quot;
-depot
-Renes—Gare
-Epenex
-Crochy
-Cerisaie
-Bassenges
-EPFL
-UNL—Sorge
-Mouline
-UNL—Chemberonne
-Bourdonnette
-Melley
-Provence
-Montelly
-Vigie
-Lausanne—Flon
-depot
-&gt; /output &quot;m2&quot;
-depot
-Croisettes
-Vennes
-Fourmi
-Sallaz
-CHUV
-Ours
-Riponne M.Bejart
-Bessieres
-Lausanne—Flon
-Lausanne Gare CFF
-Grancy
-Delices
-Jourdils
-Ouchy—Olympique
-depot
+&gt; /route &quot;Waterloo &amp; City line&quot; &quot;Waterloo&quot; &quot;Waterloo &amp; City line&quot; &quot;Bank&quot;
+Waterloo
+Bank
 ?[1;31m
 Start test 2?[0m
-&gt; /append &quot;m1&quot; &quot;Test station 1&quot;
-&gt; /output &quot;m1&quot;
-depot
-Renes—Gare
-Epenex
-Crochy
-Cerisaie
-Bassenges
-EPFL
-UNL—Sorge
-Mouline
-UNL—Chemberonne
-Bourdonnette
-Melley
-Provence
-Montelly
-Vigie
-Lausanne—Flon
-Test station 1
-depot
-&gt; /append &quot;m1&quot; &quot;Test station 2&quot;
-&gt; /output &quot;m1&quot;
-depot
-Renes—Gare
-Epenex
-Crochy
-Cerisaie
-Bassenges
-EPFL
-UNL—Sorge
-Mouline
-UNL—Chemberonne
-Bourdonnette
-Melley
-Provence
-Montelly
-Vigie
-Lausanne—Flon
-Test station 1
-Test station 2
-depot
-&gt; /add-head &quot;m1&quot; &quot;Head&quot;
-&gt; /output &quot;m1&quot;
-depot
-Head
-Renes—Gare
-Epenex
-Crochy
-Cerisaie
-Bassenges
-EPFL
-UNL—Sorge
-Mouline
-UNL—Chemberonne
-Bourdonnette
-Melley
-Provence
-Montelly
-Vigie
-Lausanne—Flon
-Test station 1
-Test station 2
-depot
+&gt; /route &quot;Victoria line&quot; &quot;Victoria&quot; &quot;Northern line&quot; &quot;Oval&quot;
+Victoria
+Pimlico
+Vauxhall
+Stockwell
+Transition to line Northern line
+Stockwell
+Oval
 ?[1;31m
 Start test 3?[0m
-Error! Such a file doesn't exist!
+&gt; /route &quot;Victoria line&quot; &quot;Green Park&quot; &quot;Northern line&quot; &quot;Oval&quot;
+Green Park
+Transition to line Jubilee line
+Green Park
+Westminster
+Waterloo
+Transition to line Northern line
+Waterloo
+Kennington
+Oval
 ?[1;31m
 Start test 4?[0m
-&gt; /output &quot;Linka A&quot;
-depot
-Nemocnice Motol
-Petriny
-Nadrazi Veleslavin
-Borislavka
-Dejvicka
-Hradcanska
-Malostranska
-Staromestska
-Mustek - Mustek (Linka B line)
-Muzeum - Muzeum (Linka C line)
-Namesti Miru
-Jiriho z Podebrad
-Flora
-Zelivskeho
-Strasnicka
-Skalka
-Depo Hostivar
-depot
+&gt; /route &quot;Piccadilly line&quot; &quot;Heathrow Terminal 5&quot; &quot;Piccadilly line&quot; &quot;Hounslow West&quot;
+Heathrow Terminal 5
+Heathrow Terminals 1-2-3
+Hatton Cross
+Hounslow West
 ?[1;31m
 Start test 5?[0m
-&gt; /connect &quot;Linka C&quot; &quot;I.P.Pavlova&quot; &quot;Linka A&quot; &quot;Petriny&quot;
-&gt; /output &quot;Linka A&quot;
-depot
-Nemocnice Motol
-Petriny - I.P.Pavlova (Linka C line)
-Nadrazi Veleslavin
-Borislavka
-Dejvicka
-Hradcanska
-Malostranska
-Staromestska
-Mustek - Mustek (Linka B line)
-Muzeum - Muzeum (Linka C line)
-Namesti Miru
-Jiriho z Podebrad
-Flora
-Zelivskeho
-Strasnicka
-Skalka
-Depo Hostivar
-depot
+&gt; /route &quot;Piccadilly line&quot; &quot;Hatton Cross&quot; &quot;Piccadilly line&quot; &quot;Heathrow Terminal 4&quot;
+Hatton Cross
+Heathrow Terminal 4
 ?[1;31m
 Start test 6?[0m
-&gt; /route &quot;Linka A&quot; &quot;Petriny&quot; &quot;Linka A&quot; &quot;Flora&quot;
-Petriny
-Nadrazi Veleslavin
-Borislavka
-Dejvicka
-Hradcanska
-Malostranska
-Staromestska
-Mustek
-Muzeum
-Namesti Miru
-Jiriho z Podebrad
-Flora
+&gt; /fastest-route &quot;District line&quot; &quot;Richmond&quot; &quot;District line&quot; &quot;Gunnersbury&quot;
+Richmond
+Kew Gardens
+Gunnersbury
+Total: 12 minutes in the way
 ?[1;31m
 Start test 7?[0m
-&gt; /route &quot;Linka C&quot; &quot;Vysehrad&quot; &quot;Linka B&quot; &quot;Namesti Republiky&quot;
-Vysehrad
-I.P.Pavlova
-Muzeum
-Transition to line Linka A
-Muzeum
-Mustek
-Transition to line Linka B
-Mustek
-Namesti Republiky
-?[1;31m
-Start test 8?[0m
-&gt; /fastest-route &quot;Linka A&quot; &quot;Borislavka&quot; &quot;Linka A&quot; &quot;Flora&quot;
-Borislavka
-Dejvicka
-Hradcanska
-Malostranska
-Staromestska
-Mustek
-Muzeum
-Namesti Miru
-Jiriho z Podebrad
-Flora
-Total: 44 minutes in the way
-?[1;31m
-Start test 9?[0m
-&gt; /fastest-route &quot;Linka C&quot; &quot;Vysehrad&quot; &quot;Linka B&quot; &quot;Namesti Republiky&quot;
-Vysehrad
-I.P.Pavlova
-Muzeum
-Hlavni nadrazi
-Florenc
-Transition to line Linka B
-Florenc
-Namesti Republiky
-Total: 29 minutes in the way
+&gt; /fastest-route &quot;Victoria line&quot; &quot;Brixton&quot; &quot;Northern line&quot; &quot;Angel&quot;
+Brixton
+Stockwell
+Transition to line Northern line
+Stockwell
+Oval
+Kennington
+Waterloo
+Transition to line Waterloo &amp; City line
+Waterloo
+Bank
+Transition to line Northern line
+Bank
+Moorgate
+Old Street
+Angel
+Total: 47 minutes in the way
 </pre>
 </span>
 </div>
@@ -301,7 +163,7 @@ Total: 29 minutes in the way
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 7.6</a> at Dec 25, 2023, 7:01:34 PM</p>
+<a href="http://www.gradle.org">Gradle 7.6</a> at Dec 27, 2023, 3:15:14 PM</p>
 </div>
 </div>
 </body>

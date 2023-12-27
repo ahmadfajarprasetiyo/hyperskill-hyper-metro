@@ -5,22 +5,22 @@ import java.util.List;
 
 public class Station {
 
-    private Station prev = null;
-    private Station next = null;
+    private List<Station> prev;
+    private List<Station> next;
 
-    private final int time;
+    private int time;
     private final String name;
     private final String lineName;
-    private final int order;
 
-    private List<Station> transferStations;
+    final private List<Station> transferStations;
 
-    Station(String name, String lineName, int order, int time) {
+    Station(String name, String lineName, int time) {
         this.lineName = lineName;
         this.name = name;
-        this.order = order;
         this.time = time;
         this.transferStations = new ArrayList<>();
+        this.prev = new ArrayList<>();
+        this.next = new ArrayList<>();
     }
 
     public String getName() {
@@ -31,68 +31,71 @@ public class Station {
         return lineName;
     }
 
-    public int getOrder() {
-        return order;
-    }
-
     public int getTime() {
         return time;
     }
-    public void setNext(Station next) {
-        this.next = next;
+
+    public void setTime(int time) {
+        this.time = time;
     }
-
-    public void setPrev(Station prev) {
-        this.prev = prev;
-    }
-
-    public Station getNext() {
-        return next;
-    }
-
-    public Station getPrev() {
-        return prev;
-    }
-
-    public void addTailStation(Station station) {
-        station.setNext(this.next);
-        this.next = station;
-        station.setPrev(this);
-
-        if (station.getNext() != null) {
-            station.getNext().setPrev(station);
+    public void addNext(Station next) {
+        if (this.next.contains(next)) {
+            return;
         }
+        this.next.add(next);
     }
 
-    public void addHeadStation(Station station) {
-        this.prev = station;
-        station.setNext(this);
+    public void addPrev(Station prev) {
+        if (this.prev.contains(prev)) {
+            return;
+        }
+        this.prev.add(prev);
+    }
+
+    public void removeNext(Station next) {
+        this.next.remove(next);
+    }
+
+    public void removePrev(Station prev) {
+        this.prev.remove(prev);
+    }
+
+    private List<Station> getNext() {
+        return this.next;
+    }
+
+    private List<Station> getPrev() {
+        return this.prev;
+    }
+
+    public Station getOneNext() {
+        if (this.next.isEmpty()) {
+            return null;
+        }
+        return this.next.get(this.next.size() - 1);
     }
 
     public List<Station> getNeighbor() {
         List<Station> res = new ArrayList<>();
 
-        if (this.getNext() != null) {
-            res.add(this.getNext());
-        }
-
-        if (this.getPrev() != null) {
-            res.add(this.getPrev());
-        }
-
         res.addAll(this.transferStations);
+        res.addAll(this.getNext());
+        res.addAll(this.getPrev());
+
 
         return res;
     }
 
     public void remove() {
-        if (this.prev != null) {
-            this.prev.setNext(this.next);
+        for (Station station : this.prev) {
+            station.removeNext(this);
         }
 
-        if (this.next != null) {
-            this.next.setPrev(this.prev);
+        for (Station station : this.next) {
+            station.removePrev(this);
         }
+        this.prev = null;
+        this.next = null;
     }
 
     private boolean isConnectedStation(Station newStation) {
@@ -124,6 +127,16 @@ public class Station {
         System.out.println();
     }
 
+    public boolean isFirstStation() {
+        return this.prev.isEmpty();
+    }
 
+    public boolean isLastStation() {
+        return this.next.isEmpty();
+    }
+
+    public boolean isContainsNext(Station station) {
+        return this.getNext().contains(station);
+    }
 
 }

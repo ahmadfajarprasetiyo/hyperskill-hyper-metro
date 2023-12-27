@@ -7178,6 +7178,533 @@ files:
           }
       }
     learner_created: false
+  - name: src/metro/Line.java
+    visible: true
+    text: |
+      package metro;
+      
+      
+      public class Line {
+          private final String name;
+          private Station firstDepot;
+          private Station lastDepot;
+          private Station firstStation;
+          private Station lastStation;
+      
+          Line(String name) {
+              this.name = name;
+              this.firstDepot = new Station("depot", name, Integer.MIN_VALUE, Integer.MAX_VALUE);
+              this.lastDepot = new Station("depot", name, Integer.MAX_VALUE, Integer.MAX_VALUE);
+          }
+      
+          public String getName() {
+              return name;
+          }
+      
+          public void addStation(Station station) {
+              if (firstStation == null) {
+                  this.firstStation = station;
+                  this.lastStation = station;
+              } else if (firstStation.getOrder() > station.getOrder()) {
+                  firstStation.addHeadStation(station);
+                  firstStation = station;
+              } else {
+                  Station iter = firstStation;
+                  while (iter.getOrder() < station.getOrder() && iter.getNext() != null) {
+                      iter = iter.getNext();
+                  }
+      
+                  if (iter.getOrder() != station.getOrder()) {
+                      if (iter.getNext() == null) {
+                          lastStation = station;
+                      }
+      
+                      iter.addTailStation(station);
+                  }
+      
+              }
+          }
+      
+          public void addHeadStation(String stationName, int time) {
+              Station station = new Station(stationName, this.name, Integer.MIN_VALUE, time);
+              firstStation.addHeadStation(station);
+              firstStation = station;
+          }
+      
+          public void addTailStation(String stationName, int time) {
+              Station station = new Station(stationName, this.name, Integer.MAX_VALUE, time);
+              lastStation.addTailStation(station);
+              lastStation = station;
+          }
+      
+          public void removeStation(String stationName) {
+              Station station = firstStation;
+              boolean isFinish = false;
+      
+              while (station != null && !isFinish) {
+                  if (station.getName().equals(stationName)) {
+                      if (station == firstStation) {
+                          firstStation = station.getNext();
+                      } else if (station == lastStation) {
+                          lastStation = station.getPrev();
+                      }
+      
+                      station.remove();
+                      isFinish = true;
+                  }
+              }
+          }
+      
+          public void printLine() {
+      
+              Station station = null;
+      
+              if (this.firstDepot != null && this.lastStation != null) {
+                  this.firstDepot.setNext(this.firstStation);
+                  this.lastStation.setNext(this.lastDepot);
+      
+                  station = this.firstDepot;
+              } else {
+                  System.out.println("depot");
+              }
+      
+      
+      
+              while (station != null) {
+                  station.printStation();
+                  station = station.getNext();
+      
+              }
+      
+              if (this.firstDepot != null && this.lastStation != null) {
+                  this.firstDepot.setNext(null);
+                  this.lastStation.setNext(null);
+              }
+          }
+      
+          public Station getStationInLine(String stationName) {
+              Station station = this.firstStation;
+      
+              while (station != null) {
+                  if (station.getName().equals(stationName)) {
+                      return station;
+                  }
+      
+                  station = station.getNext();
+              }
+      
+              return null;
+          }
+      
+      
+      }
+    learner_created: true
+  - name: src/metro/MetroMap.java
+    visible: true
+    text: |
+      package metro;
+      
+      import java.util.*;
+      
+      public class MetroMap {
+      
+          private  List<Line> lines;
+      
+          MetroMap() {
+              lines = new ArrayList<>();
+          }
+      
+          public Line getSafeLine(String lineName) {
+              Line line = this.getLine(lineName);
+              if (line == null) {
+                  line = this.addLine(lineName);
+              }
+              return line;
+          }
+          private Line getLine(String lineName) {
+              for (Line line : lines) {
+                  if (lineName.equals(line.getName())) {
+                      return line;
+                  }
+              }
+      
+              return null;
+          }
+          public Line addLine(String lineName) {
+              Line line = new Line(lineName);
+              this.lines.add(line);
+              return line;
+          }
+          public void buildConnection(Map<Station, List<String>> mapStationTransfer) {
+              for (Station station : mapStationTransfer.keySet()) {
+                  List<String> values = mapStationTransfer.get(station);
+                  for (String value : values) {
+                      String[] lineAndStation = value.split("\\|");
+                      this.getSafeLine(lineAndStation[1]).getStationInLine(lineAndStation[0]).connectStation(station);
+                  }
+      
+              }
+          }
+          private Map<Station, Integer> searchRoute(Station srcStation,Station desStation) {
+              Set<Station> visitedStation = new HashSet<>();
+              Map<Station, Integer> mapDistance = new HashMap<>();
+              Queue<Station> queue = new ArrayDeque<>();
+      
+              int distance = 0;
+      
+              visitedStation.add(srcStation);
+              mapDistance.put(srcStation, distance);
+              queue.add(srcStation);
+      
+      
+              while (!queue.isEmpty()) {
+                  Station processStation = queue.poll();
+      
+                  if (processStation == desStation) {
+                      break;
+                  }
+      
+                  distance = mapDistance.get(processStation) + 1;
+      
+                  List<Station> allNeighbor = processStation.getNeighbor();
+      
+                  for (Station neighbor : allNeighbor) {
+                      if (visitedStation.contains(neighbor)) {
+                          continue;
+                      }
+      
+                      visitedStation.add(neighbor);
+                      queue.offer(neighbor);
+                      mapDistance.put(neighbor, distance);
+                  }
+              }
+      
+              return mapDistance;
+          }
+          public void printRoute(String srcLineName, String srcStationName, String desLineName, String desStationName) {
+              Station srcStation = this.getSafeLine(srcLineName).getStationInLine(srcStationName);
+              Station desStation = this.getSafeLine(desLineName).getStationInLine(desStationName);
+      
+              Map<Station, Integer> mapDistance = this.searchRoute(srcStation, desStation);
+      
+      
+              Stack<String> stackRoute = new Stack<>();
+              stackRoute.push(desStationName);
+      
+              int distance = mapDistance.get(desStation);
+              Station processStation = desStation;
+      
+              while (distance >= 0) {
+                  distance = distance - 1;
+      
+                  List<Station> allNeighbor = processStation.getNeighbor();
+      
+                  for (Station neighbor : allNeighbor) {
+                      Integer distanceNeighbor = mapDistance.get(neighbor);
+      
+                      if (distanceNeighbor == null || distanceNeighbor != distance) {
+                          continue;
+                      }
+      
+      
+                      if (!neighbor.getLineName().equals(processStation.getLineName())) {
+                          stackRoute.push(String.join("","Transition to line ",processStation.getLineName()));
+                      }
+      
+                      stackRoute.push(neighbor.getName());
+                      processStation = neighbor;
+                      break;
+                  }
+              }
+      
+      
+      
+              while (!stackRoute.isEmpty()) {
+                  System.out.println(stackRoute.pop());
+              }
+          }
+          public void buildConnection(String lineName1, String stationName1, String lineName2, String stationName2) {
+              this.getSafeLine(lineName1).getStationInLine(stationName1).connectStation(this.getSafeLine(lineName2).getStationInLine(stationName2));
+          }
+          public boolean isEmpty() {
+              return lines.isEmpty();
+          }
+      
+          private Map<Station, DijkstraStation> searchFastestRoute(Station srcStation,Station desStation) {
+      
+              Set<Station> visitedStation = new HashSet<>();
+              Map<Station, DijkstraStation> mapTimeElapse = new HashMap<>();
+              PriorityQueue<DijkstraStation> priorityQueue = new PriorityQueue<>(new DijkstraStationComparator());
+      
+              DijkstraStation srcDijkstraStation = new DijkstraStation(srcStation, 0);
+              priorityQueue.offer(srcDijkstraStation);
+              mapTimeElapse.put(srcStation, srcDijkstraStation);
+              visitedStation.add(srcStation);
+      
+              while (!priorityQueue.isEmpty()) {
+                  DijkstraStation processDijkstraStation = priorityQueue.poll();
+                  if (processDijkstraStation.getStation() == desStation) {
+                      break;
+                  }
+      
+                  List<Station> allNeighbor = processDijkstraStation.getStation().getNeighbor();
+      
+                  for (Station neighbor : allNeighbor) {
+                      int timeElapse = getTimeElapse(neighbor, processDijkstraStation);
+      
+                      DijkstraStation neighborDijkstraStation = mapTimeElapse.computeIfAbsent(neighbor, n -> new DijkstraStation(n, timeElapse));
+      
+                      if (neighborDijkstraStation.getTimeElapse() > timeElapse) {
+                          neighborDijkstraStation.setTimeElapse(timeElapse);
+                      }
+      
+                      if (!visitedStation.contains(neighbor)) {
+                          priorityQueue.offer(neighborDijkstraStation);
+                          visitedStation.add(neighbor);
+                      }
+      
+      
+                  }
+      
+              }
+      
+      
+      
+              return mapTimeElapse;
+      
+          }
+      
+          public void printFastestRoute(String srcLineName, String srcStationName, String desLineName, String desStationName) {
+              Station srcStation = this.getSafeLine(srcLineName).getStationInLine(srcStationName);
+              Station desStation = this.getSafeLine(desLineName).getStationInLine(desStationName);
+      
+              Map<Station, DijkstraStation> mapTimeElapse = this.searchFastestRoute(srcStation, desStation);
+      
+              Stack<String> stackRoute = new Stack<>();
+              stackRoute.push(desStationName);
+      
+              DijkstraStation desDijkstraStation = mapTimeElapse.get(desStation);
+              int timeElapse = desDijkstraStation.getTimeElapse();
+      
+              Station processStation = desStation;
+      
+              while (processStation !=  srcStation) {
+      
+                  List<Station> allNeighbor = processStation.getNeighbor();
+      
+                  for (Station neighbor : allNeighbor) {
+                      DijkstraStation neighborDijkstraStation = mapTimeElapse.get(neighbor);
+      
+                      if (neighborDijkstraStation == null ) {
+                          continue;
+                      }
+      
+                      int timeElapseTemp = getTimeElapse(processStation, neighborDijkstraStation);
+                      if (timeElapseTemp != timeElapse) {
+                          continue;
+                      }
+      
+      
+                      if (!neighbor.getLineName().equals(processStation.getLineName())) {
+                          stackRoute.push(String.join("","Transition to line ",processStation.getLineName()));
+                      }
+      
+                      stackRoute.push(neighbor.getName());
+                      processStation = neighbor;
+                      timeElapse = neighborDijkstraStation.getTimeElapse();
+                      break;
+                  }
+              }
+      
+      
+      
+              while (!stackRoute.isEmpty()) {
+                  System.out.println(stackRoute.pop());
+              }
+      
+              System.out.printf("Total: %d minutes in the way\n", desDijkstraStation.getTimeElapse());
+          }
+      
+          private static int getTimeElapse(Station neighbor, DijkstraStation processDijkstraStation) {
+              final int TIME_TO_TRANSFER_LINE = 5;
+              int timeElapse = processDijkstraStation.getTimeElapse();
+              if (!processDijkstraStation.getStation().getLineName().equals(neighbor.getLineName())) {
+                  timeElapse = timeElapse + TIME_TO_TRANSFER_LINE;
+              } else if (processDijkstraStation.getStation().getNext() == neighbor){
+                  timeElapse = timeElapse + processDijkstraStation.getStation().getTime();
+              } else {
+                  timeElapse = timeElapse + neighbor.getTime();
+              }
+              return timeElapse;
+          }
+      
+          static class DijkstraStationComparator implements Comparator<DijkstraStation>{
+      
+              public int compare(DijkstraStation s1, DijkstraStation s2) {
+                  return Integer.compare(s1.getTimeElapse(), s2.getTimeElapse());
+              }
+          }
+      
+          static class DijkstraStation{
+              private Station station;
+              private int timeElapse;
+      
+              DijkstraStation(Station station, int timeElapse) {
+                  this.station = station;
+                  this.timeElapse = timeElapse;
+              }
+      
+              public int getTimeElapse() {
+                  return timeElapse;
+              }
+      
+              public Station getStation() {
+                  return station;
+              }
+      
+              public void setTimeElapse(int timeElapse) {
+                  this.timeElapse = timeElapse;
+              }
+          }
+      }
+    learner_created: true
+  - name: src/metro/Station.java
+    visible: true
+    text: |
+      package metro;
+      
+      import java.util.ArrayList;
+      import java.util.List;
+      
+      public class Station {
+      
+          private Station prev = null;
+          private Station next = null;
+      
+          private final int time;
+          private final String name;
+          private final String lineName;
+          private final int order;
+      
+          private List<Station> transferStations;
+      
+          Station(String name, String lineName, int order, int time) {
+              this.lineName = lineName;
+              this.name = name;
+              this.order = order;
+              this.time = time;
+              this.transferStations = new ArrayList<>();
+          }
+      
+          public String getName() {
+              return name;
+          }
+      
+          public String getLineName() {
+              return lineName;
+          }
+      
+          public int getOrder() {
+              return order;
+          }
+      
+          public int getTime() {
+              return time;
+          }
+          public void setNext(Station next) {
+              this.next = next;
+          }
+      
+          public void setPrev(Station prev) {
+              this.prev = prev;
+          }
+      
+          public Station getNext() {
+              return next;
+          }
+      
+          public Station getPrev() {
+              return prev;
+          }
+      
+          public void addTailStation(Station station) {
+              station.setNext(this.next);
+              this.next = station;
+              station.setPrev(this);
+      
+              if (station.getNext() != null) {
+                  station.getNext().setPrev(station);
+              }
+          }
+      
+          public void addHeadStation(Station station) {
+              this.prev = station;
+              station.setNext(this);
+          }
+      
+          public List<Station> getNeighbor() {
+              List<Station> res = new ArrayList<>();
+      
+              if (this.getNext() != null) {
+                  res.add(this.getNext());
+              }
+      
+              if (this.getPrev() != null) {
+                  res.add(this.getPrev());
+              }
+      
+              res.addAll(this.transferStations);
+      
+              return res;
+          }
+      
+          public void remove() {
+              if (this.prev != null) {
+                  this.prev.setNext(this.next);
+              }
+      
+              if (this.next != null) {
+                  this.next.setPrev(this.prev);
+              }
+          }
+      
+          private boolean isConnectedStation(Station newStation) {
+              for (Station station : this.transferStations) {
+                  if (station == newStation) {
+                      return true;
+                  }
+              }
+      
+              return false;
+          }
+      
+          public void connectStation(Station station) {
+              if (this.isConnectedStation(station)) {
+                  return;
+              }
+      
+              this.transferStations.add(station);
+              station.connectStation(this);
+          }
+      
+          public void printStation() {
+              System.out.print(this.getName());
+      
+              for (Station station : this.transferStations) {
+                  System.out.printf(" - %s (%s line)", station.getName(), station.getLineName());
+              }
+      
+              System.out.println();
+          }
+      
+      
+      
+      }
+    learner_created: true
 feedback_link: https://hyperskill.org/learn/step/10346#comment
-status: Unchecked
+status: Solved
+feedback:
+  message: Well done! You've finished the project. Select a new project on <a href="https://hyperskill.org/projects">Hyperskill</a>
+    to continue learning.
+  time: "Wed, 27 Dec 2023 08:15:14 UTC"
 record: -1

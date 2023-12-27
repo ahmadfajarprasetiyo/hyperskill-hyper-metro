@@ -3,7 +3,7 @@ hyperskill_project:
   ide_files: https://cogniterra.org/media/attachments/lesson/25042/additional_files.json
   is_template_based: false
   use_ide: true
-update_date: "Sat, 16 Dec 2023 09:20:08 UTC"
+update_date: "Wed, 27 Dec 2023 07:28:24 UTC"
 stages:
   - id: 648
     step: 10341
@@ -22,16 +22,16 @@ stages:
     is_completed: true
   - id: 653
     step: 10346
-    is_completed: false
+    is_completed: true
 topics:
   0:
     - title: Computer algorithms
       theory_id: 16547
     - title: "Big O: how to count it"
       theory_id: 35901
-    - title: "Best, average and worst cases"
+    - title: Complexity cases and how to use them
       theory_id: 20084
-    - title: Data structures
+    - title: Abstract and concrete data structures
       theory_id: 16927
     - title: "Write, compile, and run"
       theory_id: 3739
@@ -49,10 +49,10 @@ topics:
       theory_id: 15090
     - title: Pseudocode basics
       theory_id: 19510
-    - title: Complex constructions in pseudocode
-      theory_id: 20922
     - title: Singly linked list
       theory_id: 5336
+    - title: Complex constructions in pseudocode
+      theory_id: 20922
     - title: Doubly linked list
       theory_id: 5335
     - title: Introduction to Java
@@ -143,12 +143,12 @@ topics:
       theory_id: 5504
     - title: Command-line arguments
       theory_id: 3566
-    - title: Processing strings
-      theory_id: 3551
     - title: Introduction to logging
       theory_id: 5538
     - title: Debugging techniques
       theory_id: 13775
+    - title: Processing strings
+      theory_id: 3551
     - title: Array exceptions
       theory_id: 1940
     - title: IntelliJ IDEA

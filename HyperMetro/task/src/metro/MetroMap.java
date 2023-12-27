@@ -41,84 +41,7 @@ public class MetroMap {
 
         }
     }
-    private Map<Station, Integer> searchRoute(Station srcStation,Station desStation) {
-        Set<Station> visitedStation = new HashSet<>();
-        Map<Station, Integer> mapDistance = new HashMap<>();
-        Queue<Station> queue = new ArrayDeque<>();
 
-        int distance = 0;
-
-        visitedStation.add(srcStation);
-        mapDistance.put(srcStation, distance);
-        queue.add(srcStation);
-
-
-        while (!queue.isEmpty()) {
-            Station processStation = queue.poll();
-
-            if (processStation == desStation) {
-                break;
-            }
-
-            distance = mapDistance.get(processStation) + 1;
-
-            List<Station> allNeighbor = processStation.getNeighbor();
-
-            for (Station neighbor : allNeighbor) {
-                if (visitedStation.contains(neighbor)) {
-                    continue;
-                }
-
-                visitedStation.add(neighbor);
-                queue.offer(neighbor);
-                mapDistance.put(neighbor, distance);
-            }
-        }
-
-        return mapDistance;
-    }
-    public void printRoute(String srcLineName, String srcStationName, String desLineName, String desStationName) {
-        Station srcStation = this.getSafeLine(srcLineName).getStationInLine(srcStationName);
-        Station desStation = this.getSafeLine(desLineName).getStationInLine(desStationName);
-
-        Map<Station, Integer> mapDistance = this.searchRoute(srcStation, desStation);
-
-
-        Stack<String> stackRoute = new Stack<>();
-        stackRoute.push(desStationName);
-
-        int distance = mapDistance.get(desStation);
-        Station processStation = desStation;
-
-        while (distance >= 0) {
-            distance = distance - 1;
-
-            List<Station> allNeighbor = processStation.getNeighbor();
-
-            for (Station neighbor : allNeighbor) {
-                Integer distanceNeighbor = mapDistance.get(neighbor);
-
-                if (distanceNeighbor == null || distanceNeighbor != distance) {
-                    continue;
-                }
-
-
-                if (!neighbor.getLineName().equals(processStation.getLineName())) {
-                    stackRoute.push(String.join("","Transition to line ",processStation.getLineName()));
-                }
-
-                stackRoute.push(neighbor.getName());
-                processStation = neighbor;
-                break;
-            }
-        }
-
-
-
-        while (!stackRoute.isEmpty()) {
-            System.out.println(stackRoute.pop());
-        }
-    }
     public void buildConnection(String lineName1, String stationName1, String lineName2, String stationName2) {
         this.getSafeLine(lineName1).getStationInLine(stationName1).connectStation(this.getSafeLine(lineName2).getStationInLine(stationName2));
     }
@@ -126,7 +49,7 @@ public class MetroMap {
         return lines.isEmpty();
     }
 
-    private Map<Station, DijkstraStation> searchFastestRoute(Station srcStation,Station desStation) {
+    private Map<Station, DijkstraStation> searchFastestRoute(Station srcStation, Station desStation, boolean isDistance) {
 
         Set<Station> visitedStation = new HashSet<>();
         Map<Station, DijkstraStation> mapTimeElapse = new HashMap<>();
@@ -170,11 +93,11 @@ public class MetroMap {
 
     }
 
-    public void printFastestRoute(String srcLineName, String srcStationName, String desLineName, String desStationName) {
+    public void printFastestRoute(String srcLineName, String srcStationName, String desLineName, String desStationName, boolean isDistance) {
         Station srcStation = this.getSafeLine(srcLineName).getStationInLine(srcStationName);
         Station desStation = this.getSafeLine(desLineName).getStationInLine(desStationName);
 
-        Map<Station, DijkstraStation> mapTimeElapse = this.searchFastestRoute(srcStation, desStation);
+        Map<Station, DijkstraStation> mapTimeElapse = this.searchFastestRoute(srcStation, desStation, isDistance);
 
         Stack<String> stackRoute = new Stack<>();
         stackRoute.push(desStationName);
@@ -218,7 +141,10 @@ public class MetroMap {
             System.out.println(stackRoute.pop());
         }
 
-        System.out.printf("Total: %d minutes in the way\n", desDijkstraStation.getTimeElapse());
+        if (!isDistance) {
+            System.out.printf("Total: %d minutes in the way\n", desDijkstraStation.getTimeElapse());
+        }
+
     }
 
     private static int getTimeElapse(Station neighbor, DijkstraStation processDijkstraStation) {
@@ -226,7 +152,7 @@ public class MetroMap {
         int timeElapse = processDijkstraStation.getTimeElapse();
         if (!processDijkstraStation.getStation().getLineName().equals(neighbor.getLineName())) {
             timeElapse = timeElapse + TIME_TO_TRANSFER_LINE;
-        } else if (processDijkstraStation.getStation().getNext() == neighbor){
+        } else if (processDijkstraStation.getStation().isContainsNext(neighbor)){
             timeElapse = timeElapse + processDijkstraStation.getStation().getTime();
         } else {
             timeElapse = timeElapse + neighbor.getTime();

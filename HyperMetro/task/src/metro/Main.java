@@ -3,8 +3,7 @@ package metro;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
@@ -28,7 +27,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         Pattern regex = Pattern.compile("[^\\s\"']+|\"[^\"]*\"|'[^']*'");
 
-        String filePath = "test3.json";
+        String filePath = "test1.json";
         if (args.length > 0) {
             filePath = args[0];
         }
@@ -85,22 +84,13 @@ public class Main {
                 }
 
                 switch (action){
-                    case ACTION_APPEND, ACTION_ADD -> {
+                    case ACTION_APPEND, ACTION_ADD, ACTION_ADD_HEAD -> {
                         int time = Integer.MAX_VALUE;
                         if (params.size() == 4) {
                             time = Integer.parseInt(params.get(3));
                         }
                         if (line != null) {
-                            line.addTailStation(params.get(2), time);
-                        }
-                    }
-                    case ACTION_ADD_HEAD -> {
-                        int time = Integer.MAX_VALUE;
-                        if (params.size() == 4) {
-                            time = Integer.parseInt(params.get(3));
-                        }
-                        if (line != null) {
-                            line.addHeadStation(params.get(2), time);
+                            line.addStation(params.get(2), time, new ArrayList<>(), new ArrayList<>());
                         }
                     }
                     case ACTION_REMOVE -> {
@@ -114,8 +104,8 @@ public class Main {
                         }
                     }
                     case ACTION_CONNECT -> metroMap.buildConnection(params.get(1),params.get(2),params.get(3),params.get(4));
-                    case ACTION_ROUTE -> metroMap.printRoute(params.get(1),params.get(2),params.get(3),params.get(4));
-                    case ACTION_FASTEST_ROUTE -> metroMap.printFastestRoute(params.get(1),params.get(2),params.get(3),params.get(4));
+                    case ACTION_ROUTE -> metroMap.printFastestRoute(params.get(1),params.get(2),params.get(3),params.get(4), true);
+                    case ACTION_FASTEST_ROUTE -> metroMap.printFastestRoute(params.get(1),params.get(2),params.get(3),params.get(4), false);
                     case ACTION_EXIT -> System.out.print("");
                     default -> System.out.println("Invalid command");
                 }
@@ -136,17 +126,37 @@ public class Main {
             String lineName = jsonReader.nextName();
             Line line = metroMap.getSafeLine(lineName);
 
-            jsonReader.beginObject();
+            jsonReader.beginArray();
             while (jsonReader.hasNext()) {
-                String orderString = jsonReader.nextName();
                 List<String> transfer = new ArrayList<>();
-                int order = Integer.parseInt(orderString);
+                List<String> nextStationName = new ArrayList<>();
+                List<String> prevStationName = new ArrayList<>();
                 String stationName = "";
                 int timeElapse = 0;
 
                 jsonReader.beginObject();
                 while (jsonReader.hasNext()) {
                     String nameAttribute = jsonReader.nextName();
+
+                    if (nameAttribute.equals("next")) {
+                        jsonReader.beginArray();
+
+                        while (jsonReader.hasNext()) {
+                            nextStationName.add(jsonReader.nextString());
+                        }
+
+                        jsonReader.endArray();
+                    }
+
+                    if (nameAttribute.equals("prev")) {
+                        jsonReader.beginArray();
+
+                        while (jsonReader.hasNext()) {
+                            prevStationName.add(jsonReader.nextString());
+                        }
+
+                        jsonReader.endArray();
+                    }
 
                     if (nameAttribute.equals("time")) {
                         if (jsonReader.peek() == JsonToken.NUMBER) {
@@ -189,13 +199,11 @@ public class Main {
                 }
                 jsonReader.endObject();
 
-                Station station = new Station(stationName, lineName, order, timeElapse);
-                line.addStation(station);
-
+                Station station = line.addStation(stationName, timeElapse, nextStationName, prevStationName);
                 mapStationTransfer.put(station, transfer);
             }
 
-            jsonReader.endObject();
+            jsonReader.endArray();
         }
         jsonReader.endObject();
 

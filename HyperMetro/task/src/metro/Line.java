@@ -1,84 +1,83 @@
 package metro;
 
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class Line {
     private final String name;
-    private Station firstDepot;
-    private Station lastDepot;
-    private Station firstStation;
-    private Station lastStation;
+    final private Station firstDepot;
+    final private Station lastDepot;
+    final private Map<String, Station> mapStationName;
 
     Line(String name) {
         this.name = name;
-        this.firstDepot = new Station("depot", name, Integer.MIN_VALUE, Integer.MAX_VALUE);
-        this.lastDepot = new Station("depot", name, Integer.MAX_VALUE, Integer.MAX_VALUE);
+        this.firstDepot = new Station("depot", name, Integer.MAX_VALUE);
+        this.lastDepot = new Station("depot", name, Integer.MAX_VALUE);
+        this.mapStationName = new HashMap<>();
     }
 
     public String getName() {
         return name;
     }
 
-    public void addStation(Station station) {
-        if (firstStation == null) {
-            this.firstStation = station;
-            this.lastStation = station;
-        } else if (firstStation.getOrder() > station.getOrder()) {
-            firstStation.addHeadStation(station);
-            firstStation = station;
-        } else {
-            Station iter = firstStation;
-            while (iter.getOrder() < station.getOrder() && iter.getNext() != null) {
-                iter = iter.getNext();
-            }
+    private void addStation(Station station, List<String> next, List<String> prev) {
+        for (String nextStationName : next) {
+            Station neighbor = this.getSafeStationInLine(nextStationName);
 
-            if (iter.getOrder() != station.getOrder()) {
-                if (iter.getNext() == null) {
-                    lastStation = station;
-                }
+            station.addNext(neighbor);
+            neighbor.addPrev(station);
+        }
 
-                iter.addTailStation(station);
-            }
+        for (String prevStationName : prev) {
+            Station neighbor = this.getSafeStationInLine(prevStationName);
+
+            neighbor.addNext(station);
+            station.addPrev(neighbor);
 
         }
     }
 
-    public void addHeadStation(String stationName, int time) {
-        Station station = new Station(stationName, this.name, Integer.MIN_VALUE, time);
-        firstStation.addHeadStation(station);
-        firstStation = station;
-    }
+    public Station addStation(String stationName, int time, List<String> next, List<String> prev) {
+        Station station = this.getSafeStationInLine(stationName);
+        station.setTime(time);
 
-    public void addTailStation(String stationName, int time) {
-        Station station = new Station(stationName, this.name, Integer.MAX_VALUE, time);
-        lastStation.addTailStation(station);
-        lastStation = station;
+
+        this.addStation(station, next, prev);
+
+        return station;
     }
 
     public void removeStation(String stationName) {
-        Station station = firstStation;
-        boolean isFinish = false;
+        Station station = this.getStationInLine(stationName);
 
-        while (station != null && !isFinish) {
-            if (station.getName().equals(stationName)) {
-                if (station == firstStation) {
-                    firstStation = station.getNext();
-                } else if (station == lastStation) {
-                    lastStation = station.getPrev();
-                }
-
-                station.remove();
-                isFinish = true;
-            }
+        if (station != null) {
+            station.remove();
         }
     }
 
     public void printLine() {
 
         Station station = null;
+        Station firstStation = null;
+        Station lastStation = null;
 
-        if (this.firstDepot != null && this.lastStation != null) {
-            this.firstDepot.setNext(this.firstStation);
-            this.lastStation.setNext(this.lastDepot);
+        for (String key : this.mapStationName.keySet()) {
+            Station stationTemp = this.mapStationName.get(key);
+            if (stationTemp.isFirstStation()) {
+                firstStation = stationTemp;
+            }
+
+            if (stationTemp.isLastStation()) {
+                lastStation = stationTemp;
+            }
+        }
+
+
+        if (lastStation != null) {
+            this.firstDepot.addNext(firstStation);
+            lastStation.addNext(this.lastDepot);
 
             station = this.firstDepot;
         } else {
@@ -89,28 +88,29 @@ public class Line {
 
         while (station != null) {
             station.printStation();
-            station = station.getNext();
+            station = station.getOneNext();
 
         }
 
-        if (this.firstDepot != null && this.lastStation != null) {
-            this.firstDepot.setNext(null);
-            this.lastStation.setNext(null);
+        if (lastStation != null) {
+            firstDepot.removeNext(firstStation);
+            lastStation.removeNext(this.lastDepot);
         }
     }
 
     public Station getStationInLine(String stationName) {
-        Station station = this.firstStation;
+        return this.mapStationName.get(stationName);
+    }
 
-        while (station != null) {
-            if (station.getName().equals(stationName)) {
-                return station;
-            }
+    private Station getSafeStationInLine(String stationName) {
 
-            station = station.getNext();
+        Station station = this.getStationInLine(stationName);
+        if (station == null) {
+            station = new Station(stationName, this.name, Integer.MAX_VALUE);
+            this.mapStationName.put(stationName, station);
         }
 
-        return null;
+        return station;
     }
 
 
